@@ -7,7 +7,7 @@
 <h1 class="text-center">Area di modifica</h1>
 <div class="row justify-content-center">
     <div class="col-5">
-        <form method="post" action="{{ route('books.update', $book->id) }}">
+        <form method="post" action="{{ route('books.update', ['id' => $book]) }}">
             @csrf
             @method('PUT')
             <div class="row row-gap-2">
