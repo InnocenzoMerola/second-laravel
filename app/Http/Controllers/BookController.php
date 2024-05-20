@@ -61,8 +61,9 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Book $book)
+    public function edit($id)
     {
+        $book = Book::findOrFail($id);
         return view('books.edit',[
             'book' => $book
         ]);
@@ -71,17 +72,18 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $id)
     {    
-        $newBook = new Book();
-        $newBook->title = $request->title;
-        $newBook->author = $request['author'];
-        $newBook->category = $request['category'];
-        $newBook->year = $request['year'];
-        $newBook->description = $request['description'];
-        $newBook->image = $request['image'];
-        $newBook->save();
-
+        $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+            'category' => 'required',
+            'year' => 'required|integer',
+            'image' => 'required',
+            'description' => 'required',
+        ]);
+        $book = Book::findOrFail($id);
+        $book->update($request->except('_token'));
         return redirect()->route('books.index');
     }
 
